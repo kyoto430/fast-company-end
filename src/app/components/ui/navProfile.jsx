@@ -13,11 +13,7 @@ const NavProfile = () => {
             <div className="btn dropdown-toggle d-flex align-items-center">
                 <div className="me-2">{currentUser.name}</div>
                 <img
-                    src={`https://avatars.dicebear.com/api/avataaars/${(
-                        Math.random() + 1
-                    )
-                        .toString(36)
-                        .substring(7)}.svg`}
+                    src={currentUser.image}
                     alt="avatar"
                     width="40"
                     height="40"
@@ -31,7 +27,7 @@ const NavProfile = () => {
                 >
                     Profile
                 </Link>
-                <Link to="logout" className="dropdown-item">
+                <Link to="/logout" className="dropdown-item">
                     Log Out
                 </Link>
             </div>
