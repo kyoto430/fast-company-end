@@ -19,9 +19,8 @@ export const CommentsProvider = ({ children }) => {
     const [comments, setComments] = useState([]);
     const [error, setError] = useState(null);
     useEffect(() => {
-        setComments(null);
-        setLoading(false);
-    }, []);
+        getComments();
+    }, [userId]);
     async function createComment(data) {
         console.log(data);
         const comment = {
@@ -31,28 +30,48 @@ export const CommentsProvider = ({ children }) => {
             created_at: Date.now(),
             userId: currentUser._id
         };
-        console.log(comment);
         try {
             const { content } = await commentService.createComment(comment);
-            console.log(content);
+            setComments((prevState) => [...prevState, content]);
         } catch (error) {
             errorCatcher(error);
         }
     }
-
+    async function getComments() {
+        try {
+            const { content } = await commentService.getComments(userId);
+            setComments(content);
+        } catch (error) {
+            errorCatcher(error);
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         if (error !== null) {
             toast(error);
             setError(null);
         }
     }, [error]);
+    async function removeComment(id) {
+        try {
+            const { content } = await commentService.removeComment(id);
+            if (content === null) {
+                setComments((prevState) =>
+                    prevState.filter((c) => c._id !== id)
+                );
+            }
+        } catch (error) {
+            errorCatcher(error);
+        }
+    }
     function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);
     }
     return (
         <CommentsContext.Provider
-            value={{ comments, createComment, isLoading }}
+            value={{ comments, createComment, isLoading, removeComment }}
         >
             {children}
         </CommentsContext.Provider>

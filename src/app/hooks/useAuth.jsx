@@ -21,7 +21,7 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-    const [currentUser, setUser] = useState();
+    const [currentUser, setUser] = useState(undefined);
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
     const history = useHistory();
@@ -98,6 +98,17 @@ const AuthProvider = ({ children }) => {
             }
         }
     }
+
+    async function updateUser(formData) {
+        try {
+            const { content } = await userService.updateUser(formData);
+            setUser(content);
+            return content;
+        } catch (error) {
+            errorCatcher(error);
+        }
+    }
+
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
@@ -135,7 +146,9 @@ const AuthProvider = ({ children }) => {
         }
     }, [error]);
     return (
-        <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut }}>
+        <AuthContext.Provider
+            value={{ signUp, logIn, currentUser, logOut, updateUser }}
+        >
             {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );
