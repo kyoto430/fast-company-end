@@ -24,12 +24,12 @@ const RegisterForm = () => {
     const { signUp } = useAuth();
     const { qualities } = useQualities();
     const qualitiesList = qualities.map((q) => ({
-        label: q.name,
+        name: q.name,
         value: q._id
     }));
     const { professions } = useProfessions();
     const professionsList = professions.map((p) => ({
-        label: p.name,
+        name: p.name,
         value: p._id
     }));
     const [errors, setErrors] = useState({});

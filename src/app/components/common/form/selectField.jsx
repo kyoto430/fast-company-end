@@ -21,10 +21,13 @@ const SelectField = ({
         !Array.isArray(options) && typeof options === "object"
             ? Object.keys(options).map((optionName) => ({
                   name: options[optionName].name,
-                  value: options[optionName]._id
+                  value: options[optionName]._id,
+                  key: options[optionName]._id
               }))
             : options;
-
+    if (typeof value === "object") {
+        value = value._id;
+    }
     return (
         <div className="mb-4">
             <label htmlFor="validationCustom04" className="form-label">
@@ -42,7 +45,7 @@ const SelectField = ({
                 </option>
                 {optionsArray &&
                     optionsArray.map((option) => (
-                        <option value={option.value} key={option.value}>
+                        <option key={option._id} value={option._id}>
                             {option.name}
                         </option>
                     ))}
